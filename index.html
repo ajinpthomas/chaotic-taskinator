@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TaskMaster</title>
+  <style>
+    /* Replace existing animations and colors with these */
+    body {
+        margin: 0;
+        font-family: monospace;
+        background: linear-gradient(120deg, #e0f7fa, #f3e5f5);
+        text-align: center;
+        overflow-x: hidden;
+    }
+
+    h1 {
+        margin-top: 30px;
+        font-size: 3em;
+        color: #7e57c2;
+        text-shadow: 2px 2px 0 #b39ddb;
+    }
+
+    #taskInput {
+        padding: 10px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        position: absolute;
+        width: 200px;
+        left: 50%;
+        top: 100px;
+        transform: translateX(-50%);
+        z-index: 10;
+        border: 2px solid #b39ddb;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        color: #555;
+    }
+
+    #taskInput:hover {
+        transition: all 0.1s ease;
+    }
+
+    #taskInput:focus {
+        animation: runAway 0.5s infinite;
+    }
+
+    @keyframes runAway {
+        0% { transform: translate(0, 0); }
+        25% { transform: translate(100px, 50px); }
+        50% { transform: translate(-100px, -50px); }
+        75% { transform: translate(-50px, 100px); }
+        100% { transform: translate(0, 0); }
+    }
+
+    #todoList {
+      list-style: none;
+      padding: 0;
+    }
+
+    #todoList li {
+      margin: 10px auto;
+      padding: 10px;
+      width: 250px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #b39ddb;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      animation: floaty 2s infinite ease-in-out, float 3s infinite ease-in-out;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes floaty {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    #todoList li:hover {
+        transform: translateZ(20px) rotateX(10deg);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 10px;
+      background: #b39ddb;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .delete-btn:hover {
+        transform: rotate(180deg) scale(1.2);
+        background: linear-gradient(45deg, #ff8e8e, #ff6b6b);
+    }
+
+    #keyboard {
+      margin-top: 200px;  /* Increased margin to create space below input */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .key {
+      width: 40px;
+      height: 40px;
+      margin: 5px;
+      background: #fff;
+      border: 1px solid #b39ddb;
+      color: #7e57c2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: relative;
+      animation: float 3s infinite ease-in-out;
+    }
+
+    .key:hover {
+      background: #e8eaf6;
+      transform: translateY(-2px);
+    }
+
+    #aiAssistant {
+      margin-top: 30px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #b39ddb;
+      border-radius: 8px;
+      color: #7e57c2;
+    }
+
+    #premium {
+      background: linear-gradient(120deg, #fff, #f3e5f5);
+      border: 2px solid #b39ddb;
+      color: #7e57c2;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📝TaskMaster</h1>
+  <input type="text" id="taskInput" placeholder="Try typing..." readonly />
+  <ul id="todoList"></ul>
+  <div id="keyboard"></div>
+  <div id="aiAssistant">💬 AI: Honestly, you’ll never finish this list.</div>
+  <div id="premium">💎 Upgrade to Useless PRO for $99/mo!</div>
+
+  <script>
+    // Disable real keyboard input
+    window.addEventListener("keydown", e => {
+        e.preventDefault();
+        return false;
+    });
+
+    // Reminder every 60s
+    setInterval(() => {
+      alert("⏰ Reminder: Don't forget to add a task you'll never finish!");
+    }, 60000);
+
+    // Random alerts every 45s
+    const randomAlerts = [
+      "⚠️ System overload: too much uselessness.",
+      "🥴 Thinking too hard can be dangerous.",
+      "💤 Productivity level: 0%",
+      "🚫 You can't delete tasks today."
+    ];
+    setInterval(() => {
+      alert(randomAlerts[Math.floor(Math.random() * randomAlerts.length)]);
+    }, 45000);
+
+    // Create fake keyboard
+    const keys = "QWERTYUIOPASDFGHJKLZXCVBNM".split("");
+    const keyboard = document.getElementById("keyboard");
+    keys.forEach(k => {
+      const key = document.createElement("div");
+      key.className = "key";
+      key.innerText = k;
+      key.onmouseenter = () => {
+        key.style.top = `${Math.random() * 300}px`;
+        key.style.left = `${Math.random() * 300}px`;
+      };
+      key.onclick = () => {
+        alert("You pressed " + k + ". Still nothing happens.");
+      };
+      keyboard.appendChild(key);
+    });
+
+    // Floating tasks with fake delete
+    const taskList = document.getElementById("todoList");
+    const fakeTasks = [
+      "Stare at the wall",
+      "Count to potato",
+      "Rearrange electrons",
+      "Water the USB port"
+    ];
+
+    function addRandomTask() {
+      const li = document.createElement("li");
+      li.textContent = fakeTasks[Math.floor(Math.random() * fakeTasks.length)];
+      const del = document.createElement("button");
+      del.className = "delete-btn";
+      del.innerText = "X";
+      del.onclick = () => {
+        alert("🛑 DELETE FAILED: This task is immortal.");
+      };
+      li.appendChild(del);
+      taskList.appendChild(li);
+    }
+
+    setInterval(addRandomTask, 20000); // Add one every 20s
+
+    // Premium popup randomly
+    setInterval(() => {
+      document.getElementById("premium").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("premium").style.display = "none";
+      }, 5000);
+    }, 70000);
+
+    const input = document.getElementById('taskInput');
+    
+    input.addEventListener('mouseover', () => {
+        const x = Math.random() * (window.innerWidth - input.offsetWidth);
+        const y = Math.random() * (window.innerHeight - input.offsetHeight);
+        input.style.left = x + 'px';
+        input.style.top = y + 'px';
+        input.style.transform = 'none';
+    });
+  </script>
+</body>
+</html>
